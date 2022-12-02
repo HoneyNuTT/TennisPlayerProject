@@ -90,7 +90,7 @@ void Team::teamUpdate() {
         for (int i = 0; i < numberOfPlayers; i++) {// updating their teams total points by again getting the summation of each players points 
             updatedTeamPoints = updatedTeamPoints + players[i].getPoints();
         }
-        std::cout << '\n' << "Total Team points are: " << updatedTeamPoints << '\n' << endl;
+        std::cout << "Total Team points are: " << updatedTeamPoints << '\n' << endl;
     }
     else {}
 

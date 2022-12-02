@@ -107,7 +107,7 @@ void readingPlayers(vector<TennisPlayer>& players, string fileName) {
 } 
 // Apply selection sort function upon vector<TennisPlayer> playerList
 int main(int argc, char* argv[]) {//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    string inLastName, inFirstName, inCountry, countryCode, inBestName, line, fileName = argv[1];
+    string inLastName, inFirstName, inCountry, countryCode = "NULL", inBestName, line, fileName = argv[1];
     int inRank, inPoints,choice, foundPlayer = NULL, listSize = 0;
 /*
     ifstream inFile;
@@ -179,6 +179,7 @@ int main(int argc, char* argv[]) {//////////////////////////////////////////////
             //update a players points
             if (choice == 2) {
                 if (foundPlayer != NULL) {
+                    playerList[foundPlayer].display();
                     playerList[foundPlayer].playerUpdate();
                     Sleep(2000);
                     choice = displayMenu();
@@ -206,12 +207,19 @@ int main(int argc, char* argv[]) {//////////////////////////////////////////////
         case 4:
             //update a teams points
             if (choice == 4) {
-                Team aTeam(countryCode, teamList);
-                aTeam.print();
-                aTeam.teamUpdate();
-                aTeam.print();
-                Sleep(2000);
-                choice = displayMenu();
+                if (countryCode != "NULL") {
+                    Team aTeam(countryCode, teamList);
+                    aTeam.print();
+                    aTeam.teamUpdate();
+                    aTeam.print();
+                    Sleep(2000);
+                    choice = displayMenu();
+                }
+                else {
+                    std::cout << " Please choose a Team to edit by choosing option 3 in the Main Menu " << endl;
+                    Sleep(2000);
+                    choice = displayMenu();
+                }
             }
             break;
         case 5:
