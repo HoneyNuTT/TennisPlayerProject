@@ -1,4 +1,5 @@
 #include <iostream>
+#include <windows.h>
 #include <string>
 #include <vector>
 #include <fstream>
@@ -29,22 +30,40 @@ int BinarySearch(vector <T> lastNames, string target, int lowVal, int highVal) {
     return itemPos;
 }
 
-//int rBinarySearch() {}
+int rBinarySearch(vector <TennisPlayer> playerList, string inFirstName, string inLastName){
+    static int high = playerList.size(), low = 0, mid = (high + low) / 2;
+    
+    if (playerList[mid].getLastName() == inLastName) {
+        return mid;
+    }
+    else {
+        if (playerList[mid].getLastName() > inLastName) {
+            high = mid - 1;
+            mid = (high + low) / 2;
+        }
+        else if (playerList[mid].getLastName() < inLastName) {
+            low = mid + 1;
+            mid = (high + low) / 2;
+        }
+    }
+
+    return rBinarySearch(playerList, inFirstName, inLastName);
+}
 
 
 //Declaring a selection sorting algorithm to sort a vector of players
-template <typename T>
-void selectionsort(vector <typename T> playerlist) {
+void selectionsort(vector<TennisPlayer>& teamList) {
     int i, j;
     int  small_index;
-    for (i = 0; i < playerlist.size() - 1; ++i) {
+
+    for (i = 0; i < teamList.size() - 1; ++i) {
         small_index = i;
-        for (j = i + 1; j < playerlist.size() - 1; ++j)
-            if (playerlist.at(j) < playerlist.at(small_index)) {
-                small_index = i;
+        for (j = i + 1; j < teamList.size() - 1; ++j) {
+            if (teamList.at(j) < teamList.at(small_index)) {
+                small_index = j;
             }
-        std::cout << "executing sort" << endl;
-        swap(playerlist.at(i), playerlist.at(small_index));
+        }
+        swap(teamList.at(i), teamList.at(small_index));
     }
 }
 
@@ -64,18 +83,15 @@ int displayMenu() {
     return choice;
 }
 
-/*reading the file into a vector
-void Readingplayers(vector<TennisPlayer>& players) {
+//reading the file into a vector
+void readingPlayers(vector<TennisPlayer>& players, string fileName) {
     int rank, points;
-    string lastname, firstname, country, fileName;
+    string lastname, firstname, country;
     ifstream Infile;
-    
-    //std::cout << " Please type the name of the .txt file you would like to find." << endl; 
-    //std::cin >> fileName;
 
-    Infile.open("WomensSingles.txt");
+    Infile.open(fileName);
 
-    cout << "Reading file." << endl;
+    cout << "Reading file " << fileName << '\n' << endl;
 
     if (!Infile.is_open()) {
         cout << "File does not exists" << endl;
@@ -88,12 +104,12 @@ void Readingplayers(vector<TennisPlayer>& players) {
         players.push_back(aplayer);
     }
     Infile.close();
-} */
+} 
 // Apply selection sort function upon vector<TennisPlayer> playerList
 int main(int argc, char* argv[]) {//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    string inLastName, inFirstName, inCountry, countryCode, inBestName, line;
-    int inRank, inPoints,choice, listSize = 0;
-
+    string inLastName, inFirstName, inCountry, countryCode, inBestName, line, fileName = argv[1];
+    int inRank, inPoints,choice, foundPlayer = NULL, listSize = 0;
+/*
     ifstream inFile;
     inFile.open("WomensSingles.txt");
     if (inFile.is_open()) {
@@ -128,33 +144,60 @@ int main(int argc, char* argv[]) {//////////////////////////////////////////////
         exit(1);
     }
     inFile.close();
+  */
 
-    //TennisPlayer newPlayer(TennisPlayer & origPlayer);
-    
     // Allow user to input a country code and print out all associated players
     // Allow user to prompt as many country codes and determine termination point
 
-    selectionsort(playerlist);
-    //std::cout << "sorted by country successfully! " << '\n' << endl;
-   
-
+    vector <TennisPlayer> playerList; //List to be sorted by Last Name
+    vector <TennisPlayer> teamList; // List to be sorted by Country
+    readingPlayers(playerList, fileName);
+    readingPlayers(teamList, fileName);
+    selectionsort(teamList);
+    
 
     choice = displayMenu();
     while (1) {
         switch (choice) {
         case 1:
-            //Find a player and return their stats
+            if (choice == 1) {
+                //Find a player and return their stats
+                for (int i = 0; i < playerList.size() - 1; i++) {
+                    playerList[i].display();
+                }
+                std::cout << '\n' << "Please enter the First and Last name of the person you would like to find. " << endl;
+                std::cin >> inFirstName;
+                std::cin >> inLastName;
+                foundPlayer = rBinarySearch(playerList, inFirstName, inLastName);
+                playerList[foundPlayer].display();
+                std::cout << '\n' << endl;
+                Sleep(2000);
+                choice = displayMenu();
+            }
             break;
         case 2:
             //update a players points
+            if (choice == 2) {
+                if (foundPlayer != NULL) {
+                    playerList[foundPlayer].playerUpdate();
+                    Sleep(2000);
+                    choice = displayMenu();
+                }
+                else {
+                    std::cout << "Please choose a player to edit by choosing option 1 in the Main Menu " << endl;
+                    Sleep(2000);
+                    choice = displayMenu();
+                }
+            }
             break;
         case 3:
             //display a team by country
             if (choice == 3) {
                 std::cout << "Enter the country code you are looking for, press n to exit program" << endl;
                 std::cin >> countryCode;
-                Team aTeam(countryCode, playerlist);
+                Team aTeam(countryCode, teamList);
                 aTeam.print();
+                Sleep(2000);
                 choice = displayMenu();
                 //somefunction { create vector teams, so we can access the vector of teams with the update function or compare}
             
@@ -163,10 +206,11 @@ int main(int argc, char* argv[]) {//////////////////////////////////////////////
         case 4:
             //update a teams points
             if (choice == 4) {
-                Team aTeam(countryCode, playerlist);
+                Team aTeam(countryCode, teamList);
                 aTeam.print();
                 aTeam.teamUpdate();
                 aTeam.print();
+                Sleep(2000);
                 choice = displayMenu();
             }
             break;
