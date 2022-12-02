@@ -78,7 +78,7 @@ int displayMenu() {
     std::cout << " 4. Update a teams points\n";
     std::cout << " 5. Compare a team with another existing team\n";
     std::cout << " 6. Copy a team\n";
-    std::cout << " 7. Delete a team \n";
+    std::cout << " 7. Exit Program \n";
     cin >> choice;
     return choice;
 }
@@ -151,6 +151,7 @@ int main(int argc, char* argv[]) {//////////////////////////////////////////////
 
     vector <TennisPlayer> playerList; //List to be sorted by Last Name
     vector <TennisPlayer> teamList; // List to be sorted by Country
+    vector <Team> listOfTeams;
     readingPlayers(playerList, fileName);
     readingPlayers(teamList, fileName);
     selectionsort(teamList);
@@ -192,12 +193,12 @@ int main(int argc, char* argv[]) {//////////////////////////////////////////////
             }
             break;
         case 3:
-            //display a team by country
+            //display a team by country + add team to a list for later use.
             if (choice == 3) {
-                std::cout << "Enter the country code you are looking for, press n to exit program" << endl;
+                std::cout << "Enter the country code you are looking for " << endl;
                 std::cin >> countryCode;
                 Team aTeam(countryCode, teamList);
-                aTeam.print();
+                aTeam.print();               
                 Sleep(2000);
                 choice = displayMenu();
                 //somefunction { create vector teams, so we can access the vector of teams with the update function or compare}
@@ -211,6 +212,7 @@ int main(int argc, char* argv[]) {//////////////////////////////////////////////
                     Team aTeam(countryCode, teamList);
                     aTeam.print();
                     aTeam.teamUpdate();
+                    aTeam.addPoints();
                     aTeam.print();
                     Sleep(2000);
                     choice = displayMenu();
@@ -224,13 +226,60 @@ int main(int argc, char* argv[]) {//////////////////////////////////////////////
             break;
         case 5:
             //compare a team with another team
+            if (choice == 5) {
+                string inFirstCountry, inSecondCountry;
+                std::cout << " Enter the first country for comparison " << endl;
+                std::cin >> inFirstCountry;
+                Team firstTeam(inFirstCountry, teamList);
+
+                Sleep(1000);
+                std::cout << " Enter the second country for comparison " << endl;
+                std::cin >> inSecondCountry;
+                Team secondTeam(inSecondCountry, teamList);
+                Sleep(1000);
+
+                std::cout << " Team: " << firstTeam.getCountry() << " and Team: " << secondTeam.getCountry() << endl;
+                firstTeam.teamUpdate();
+                secondTeam.teamUpdate();
+                Sleep(1000);
+
+                std::cout << firstTeam.getCountry() << " Has " << firstTeam.getNumberOfPlayers() << " Players ";
+                std::cout << secondTeam.getCountry() << " Has " << secondTeam.getNumberOfPlayers() << " Players " << endl;
+                Sleep(1000);
+
+                std::cout << "Displaying each countries rosters" << endl;
+                    Sleep(1000);
+                std::cout << "Team: " << firstTeam.getCountry();
+                firstTeam.print();
+                    Sleep(500);
+                std::cout << "Team: " << secondTeam.getCountry();
+                secondTeam.print();
+
+                Sleep(2000);
+                choice = displayMenu();
+
+            }
             break;
         case 6:
             //copy a team
+            if (choice == 6) {
+                std::cout << "Enter the Country of the Team for which you would like to copy " << endl;
+                std::cin >> countryCode;
+                Team aTeam(countryCode, teamList);
+                listOfTeams.push_back(aTeam);
+                for (int j = 0; j < listOfTeams.size(); j++) {
+                    listOfTeams[j].print();
+                }
+                Sleep(2000);
+                choice = displayMenu();
+            }
+
             break;
         case 7:
-            //delete a team
-            break;
+            if (choice == 7) {
+                //Exits Program
+                exit(1);
+            }
         }
     }
 
