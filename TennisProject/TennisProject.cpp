@@ -29,8 +29,8 @@ int BinarySearch(vector <T> lastNames, string target, int lowVal, int highVal) {
     }
     return itemPos;
 }
-
-int rBinarySearch(vector <TennisPlayer> playerList, string inFirstName, string inLastName){
+template <typename T> 
+int rBinarySearch(vector <T> playerList, string inFirstName, string inLastName){
     static int high = playerList.size(), low = 0, mid = (high + low) / 2;
     
     if (playerList[mid].getLastName() == inLastName) {
@@ -52,7 +52,8 @@ int rBinarySearch(vector <TennisPlayer> playerList, string inFirstName, string i
 
 
 //Declaring a selection sorting algorithm to sort a vector of players
-void selectionsort(vector<TennisPlayer>& teamList) {
+template <typename T>
+void selectionsort(vector<T>& teamList) {
     int i, j;
     int  small_index;
 
