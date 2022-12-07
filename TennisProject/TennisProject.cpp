@@ -77,8 +77,8 @@ int displayMenu() {
     std::cout << " 2. Update a players points\n";
     std::cout << " 3. Display a team by country\n";
     std::cout << " 4. Update a teams points\n";
-    std::cout << " 5. Compare a team with another existing team\n";
-    std::cout << " 6. Copy a team\n";
+    std::cout << " 5. Test Overloaded Assignment Operator\n";
+    std::cout << " 6. Test Copy Constructor\n";
     std::cout << " 7. Exit Program \n";
     cin >> choice;
     return choice;
@@ -88,64 +88,28 @@ int displayMenu() {
 void readingPlayers(vector<TennisPlayer>& players, string fileName) {
     int rank, points;
     string lastname, firstname, country;
-    ifstream Infile;
+    ifstream inFile;
 
-    Infile.open(fileName);
+    inFile.open(fileName);
 
     cout << "Reading file " << fileName << '\n' << endl;
 
-    if (!Infile.is_open()) {
+    if (!inFile.is_open()) {
         cout << "File does not exists" << endl;
         exit(1);
     }
-    while (!Infile.eof()) {
-        Infile >> rank >> lastname >> firstname >> country >> points;
+    while (!inFile.eof()) {
+        inFile >> rank >> lastname >> firstname >> country >> points;
         TennisPlayer aplayer(country, rank, lastname, firstname, points);
 
         players.push_back(aplayer);
     }
-    Infile.close();
+    inFile.close();
 } 
 // Apply selection sort function upon vector<TennisPlayer> playerList
 int main(int argc, char* argv[]) {//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     string inLastName, inFirstName, inCountry, countryCode = "NULL", inBestName, line, fileName = argv[1];
     int inRank, inPoints,choice, foundPlayer = NULL, listSize = 0;
-/*
-    ifstream inFile;
-    inFile.open("WomensSingles.txt");
-    if (inFile.is_open()) {
-        while (getline(inFile, line)) { listSize++; } // checking to see how many lines are in the file, then using this int to intialize a vector of size n.
-       //std::cout << "there are " << listSize << " Lines in this file " << endl;
-    }
-    else {
-        std::cout << "InFile Failed" << endl;
-        exit (1);
-    }
-    inFile.close();
-
-    vector<TennisPlayer> playerlist(listSize); 
-
-
-    inFile.open("WomensSingles.txt");
-    if (inFile.is_open()) {
-
-        while (!inFile.eof()) {// reading from .txt file and storing names into string vectors
-            static int i = 0;
-            inFile >> inRank >> inLastName >> inFirstName >> inCountry >> inPoints;
-            playerlist.at(i).addTennisPlayer(inRank, inLastName, inFirstName, inCountry, inPoints);
-            i++;
-        }
-        //for (int i = 0; i < playerlist.size() - 1; i++) {
-        //    playerlist[i].display();
-       // }
-
-    }
-    else { 
-        std::cout << "InFile Failed" << endl;
-        exit(1);
-    }
-    inFile.close();
-  */
 
     // Allow user to input a country code and print out all associated players
     // Allow user to prompt as many country codes and determine termination point
@@ -162,7 +126,7 @@ int main(int argc, char* argv[]) {//////////////////////////////////////////////
     while (1) {
         switch (choice) {
         case 1:
-            if (choice == 1) {
+            {
                 //Find a player and return their stats
                 for (int i = 0; i < playerList.size() - 1; i++) {
                     playerList[i].display();
@@ -179,7 +143,7 @@ int main(int argc, char* argv[]) {//////////////////////////////////////////////
             break;
         case 2:
             //update a players points
-            if (choice == 2) {
+            {
                     std::cout << '\n' << "Please enter the First and Last name of the person you would like to find. " << endl;
                     std::cin >> inFirstName;
                     std::cin >> inLastName;
@@ -203,12 +167,14 @@ int main(int argc, char* argv[]) {//////////////////////////////////////////////
             break;
         case 4:
             //update a teams points
-            if (choice == 4) {
+            {
                 if (countryCode != "NULL") {
                     Team aTeam(countryCode, teamList);
                     aTeam.print();
                     aTeam.teamUpdate();
-                    aTeam.addPoints();
+                    std::cout << "How many points would you like to add? " << endl;
+                    cin >> inPoints;
+                    aTeam.addPoints(inPoints);
                     aTeam.print();
                     Sleep(2000);
                     choice = displayMenu();
@@ -221,35 +187,23 @@ int main(int argc, char* argv[]) {//////////////////////////////////////////////
             }
             break;
         case 5:
-            //compare a team with another team
-            if (choice == 5) {
-                string inFirstCountry, inSecondCountry;
+            //Testing Overloaded Operator
+            {
+                string inFirstCountry;
                 std::cout << " Enter the first country for comparison " << endl;
                 std::cin >> inFirstCountry;
                 Team firstTeam(inFirstCountry, teamList);
-
-                Sleep(1000);
-                std::cout << " Enter the second country for comparison " << endl;
-                std::cin >> inSecondCountry;
-                Team secondTeam(inSecondCountry, teamList);
-                Sleep(1000);
-
-                std::cout << " Team: " << firstTeam.getCountry() << " and Team: " << secondTeam.getCountry() << endl;
-                firstTeam.teamUpdate();
+                Team secondTeam;
+                secondTeam = firstTeam;
+                std::cout << " We are adding 200 points to Team: Copy " << endl;
+                secondTeam.addPoints(200);
+                std::cout << "Team:Copy " << secondTeam.getCountry() << endl;               
+                secondTeam.print(); 
                 secondTeam.teamUpdate();
-                Sleep(1000);
-
-                std::cout << firstTeam.getCountry() << " Has " << firstTeam.getNumberOfPlayers() << " Players ";
-                std::cout << secondTeam.getCountry() << " Has " << secondTeam.getNumberOfPlayers() << " Players " << endl;
-                Sleep(1000);
-
-                std::cout << "Displaying each countries rosters" << endl;
-                    Sleep(1000);
-                std::cout << "Team: " << firstTeam.getCountry();
+                std::cout << "\n\n";
+                std::cout << "Team:Original " << secondTeam.getCountry() << endl;
                 firstTeam.print();
-                    Sleep(500);
-                std::cout << "Team: " << secondTeam.getCountry();
-                secondTeam.print();
+                firstTeam.teamUpdate();
 
                 Sleep(2000);
                 choice = displayMenu();
@@ -258,21 +212,25 @@ int main(int argc, char* argv[]) {//////////////////////////////////////////////
             break;
         case 6:
             //copy a team copy an existing time, and update their points without touching the old version
-            if (choice == 6) {
+            {
                 std::cout << "Enter the Country of the Team for which you would like to copy " << endl;
                 std::cin >> countryCode;
                 Team aTeam(countryCode, teamList);
-                listOfTeams.push_back(aTeam);
-                for (int j = 0; j < listOfTeams.size(); j++) {
-                    listOfTeams[j].print();
-                }
+                Team bTeam(aTeam);
+                std::cout << " We are adding 300 points to Team: Copy " << endl;
+                bTeam.addPoints(300);
+                bTeam.teamUpdate();
+                bTeam.print();
+
+                aTeam.print();
+                aTeam.teamUpdate();
+
                 Sleep(2000);
                 choice = displayMenu();
             }
-
             break;
         case 7:
-            if (choice == 7) {
+            {
                 //Exits Program
                 exit(1);
             }

@@ -55,7 +55,9 @@ Team& Team:: operator=(const Team& teamCopy) {
         delete[] players;
 
         players = new TennisPlayer[teamCopy.numberOfPlayers];
-        players = (teamCopy.players);
+        for (int i = 0; i < teamCopy.numberOfPlayers; i++) {
+            players[i] = (teamCopy.players[i]);
+        }
     }
     return *this;
 }
@@ -77,21 +79,18 @@ void Team::teamUpdate() {
 
 }
 
-void Team::addPoints(){
+void Team::addPoints(int inPoints){
     int pointsToAdd = 0;
     int updatedTeamPoints = 0;
-    int inPoints = 0;
 
-    std::cout << "How many points would you like to add? " << endl;
-    cin >> pointsToAdd;
     for (int i = 0; i < numberOfPlayers; i++) { // setting each indiv players points to a pointsToAdd + their current points
-        inPoints = (players[i].getPoints() + pointsToAdd);
-        players[i].setPoints(inPoints);
+        pointsToAdd = (players[i].getPoints() + inPoints);
+        players[i].setPoints(pointsToAdd);
     }
     for (int i = 0; i < numberOfPlayers; i++) {// updating their teams total points by again getting the summation of each players points 
         updatedTeamPoints = updatedTeamPoints + players[i].getPoints();
     }
-    std::cout << '\n' << "Total Team points are: " << updatedTeamPoints << '\n' << endl;
+    //std::cout << '\n' << "Total Team points are: " << updatedTeamPoints << '\n' << endl;
 }
 
 string Team::getCountry() const

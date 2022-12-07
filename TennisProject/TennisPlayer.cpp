@@ -45,17 +45,12 @@ void TennisPlayer::playerUpdate(){
     std::cout << " Players has been updated! " << endl;
     this->display();
 }
-string TennisPlayer::getLastName() const
-{
-    return lastName;
+string TennisPlayer::getLastName() const{ return lastName;
 }
-string TennisPlayer::getFirstName() const
-{
-    return firstName;
+string TennisPlayer::getFirstName() const{return firstName;
 }
 // getter function declared
-string TennisPlayer::getcountry() const {
-    return this->country;
+string TennisPlayer::getcountry() const {return this->country;
 }
 
 int TennisPlayer::getPoints() const{ return points;
@@ -66,6 +61,6 @@ void TennisPlayer::setPoints(int inPoints){ points = inPoints;
 
 bool TennisPlayer::operator<(const TennisPlayer& lhs)
 {
-    return (this->country < lhs.getcountry());;
+    return (this->country < lhs.getcountry());
 }
 

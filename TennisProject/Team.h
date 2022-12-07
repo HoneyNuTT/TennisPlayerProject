@@ -13,7 +13,7 @@ public:
     Team& operator =(const Team& origobj); //overloaded assignment operator
     void print() const; // print function will utilize display method declared in TennisPlayer.cpp
     void teamUpdate(); //Updates the teams points
-    void addPoints();// adds points to team
+    void addPoints(int inPoints);// adds points to team
 
     string getCountry() const;
     int getNumberOfPlayers() const;
