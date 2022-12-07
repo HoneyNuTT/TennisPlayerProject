@@ -46,7 +46,7 @@ Team::Team(const Team& origTeam) {
         players[j] = (origTeam.players[j]);
     }
 }
-// declaring overloaded assigment operator
+//overloaded assigment operator
 Team& Team:: operator=(const Team& teamCopy) {
     cout << "Overloaded Assignment Operator called" << endl;
     if (this != &teamCopy) {

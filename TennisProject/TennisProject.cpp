@@ -180,17 +180,14 @@ int main(int argc, char* argv[]) {//////////////////////////////////////////////
         case 2:
             //update a players points
             if (choice == 2) {
-                if (foundPlayer != NULL) {
+                    std::cout << '\n' << "Please enter the First and Last name of the person you would like to find. " << endl;
+                    std::cin >> inFirstName;
+                    std::cin >> inLastName;
+                    foundPlayer = rBinarySearch(playerList, inFirstName, inLastName);
                     playerList[foundPlayer].display();
                     playerList[foundPlayer].playerUpdate();
                     Sleep(2000);
                     choice = displayMenu();
-                }
-                else {
-                    std::cout << "Please choose a player to edit by choosing option 1 in the Main Menu " << endl;
-                    Sleep(2000);
-                    choice = displayMenu();
-                }
             }
             break;
         case 3:
@@ -199,12 +196,10 @@ int main(int argc, char* argv[]) {//////////////////////////////////////////////
                 std::cout << "Enter the country code you are looking for " << endl;
                 std::cin >> countryCode;
                 Team aTeam(countryCode, teamList);
-                aTeam.print();               
+                aTeam.print();
                 Sleep(2000);
                 choice = displayMenu();
-                //somefunction { create vector teams, so we can access the vector of teams with the update function or compare}
-            
-             }
+        }
             break;
         case 4:
             //update a teams points
@@ -262,7 +257,7 @@ int main(int argc, char* argv[]) {//////////////////////////////////////////////
             }
             break;
         case 6:
-            //copy a team
+            //copy a team copy an existing time, and update their points without touching the old version
             if (choice == 6) {
                 std::cout << "Enter the Country of the Team for which you would like to copy " << endl;
                 std::cin >> countryCode;
